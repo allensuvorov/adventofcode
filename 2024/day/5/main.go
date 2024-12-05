@@ -10,8 +10,8 @@ import (
 )
 
 func compileUpdages(data []string) [][]int {
-	updates := make([][]int, len(data))
-	for i, line := range data {
+	updates := make([][]int, 0, len(data))
+	for _, line := range data {
 		numsStr := strings.Split(line, ",")
 		nums := make([]int, len(numsStr))
 		for i, s := range numsStr {
@@ -21,19 +21,19 @@ func compileUpdages(data []string) [][]int {
 			}
 			nums[i] = num
 		}
-		updates[i] = nums
+		updates = append(updates, nums)
 	}
 	return updates
 }
 
 func compileRules(data []string) [][]int {
-	rules := make([][]int, len(data))
+	rules := make([][]int, 0, len(data))
 	for _, line := range data {
 		num1, err := strconv.Atoi(line[:2])
 		if err != nil {
 			log.Print(err)
 		}
-		num2, err := strconv.Atoi(line[:2])
+		num2, err := strconv.Atoi(line[3:])
 		if err != nil {
 			log.Print(err)
 		}
@@ -69,17 +69,19 @@ func middlePageNumberSum(path1, path2 string) int {
 	rules := compileRules(readFile(path1))
 	updates := compileUpdages(readFile(path2))
 
-	for _, update := range updates {
-		if isValid(rules, update) {
-			pos := len(update) / 2
-			sum += update[pos]
-		}
-	}
+	fmt.Println(rules)
+	fmt.Println(updates)
+	// for _, update := range updates {
+	// 	if isValid(rules, update) {
+	// 		pos := len(update) / 2
+	// 		sum += update[pos]
+	// 	}
+	// }
 
-	return sum
+	return 0 //sum
 }
 
 func main() {
-	fmt.Println(middlePageNumberSum("input_part_1.txt", "input_part_2.txt"))
+	// fmt.Println(middlePageNumberSum("input_part_1.txt", "input_part_2.txt"))
 	fmt.Println(middlePageNumberSum("input_mini_part_1.txt", "input_mini_part_2.txt"))
 }
