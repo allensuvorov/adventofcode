@@ -50,7 +50,7 @@ func countDiagonal(matrix [][]byte) int {
 	xmasCount := 0
 	rows, cols := len(matrix), len(matrix[0])
 
-	// diagonal count left
+	// diagonal count left '\'
 	for r1 := rows - 1; r1 >= 0; r1-- {
 		q := []byte{}
 		c := 0
@@ -63,11 +63,37 @@ func countDiagonal(matrix [][]byte) int {
 		}
 	}
 
-	// diagonal count top side
+	// diagonal count right '/'
+	for r1 := rows - 1; r1 >= 1; r1-- {
+		q := []byte{}
+		c := cols - 1
+		for r := r1; r < rows; r++ {
+			q = enqueue(q, matrix[r][c])
+			if isXmas(q) {
+				xmasCount++
+			}
+			c--
+		}
+	}
+
+	// diagonal count top '\'
 	for c1 := 1; c1 < cols; c1++ {
 		q := []byte{}
 		r := 0
 		for c := c1; c < cols; c++ {
+			q = enqueue(q, matrix[r][c])
+			if isXmas(q) {
+				xmasCount++
+			}
+			r++
+		}
+	}
+
+	// diagonal count top '/'
+	for c1 := range cols {
+		q := []byte{}
+		r := 0
+		for c := c1; c >= 0; c-- {
 			q = enqueue(q, matrix[r][c])
 			if isXmas(q) {
 				xmasCount++
