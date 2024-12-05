@@ -4,15 +4,28 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"strconv"
 )
 
-func middlePageNumberSum(path1, path2 string) int {
-	rules := compileRules(readFile(path1))
+func compileRules(data []string) [][]int {
+	rules := make([][]int, len(data))
+	for _, v := range data {
+		num1, err := strconv.Atoi(v[:2])
+		if err != nil {
+			fmt.Println(err)
+		}
+		num2, err := strconv.Atoi(v[:2])
+		if err != nil {
+			fmt.Println(err)
+		}
 
-	return sum
+		rule := []int{num1, num2}
+		rules = append(rules, rule)
+	}
+	return rules
 }
 
-func readFile(path string) [][]byte {
+func readFile(path string) []string {
 	file, err := os.Open(path)
 	if err != nil {
 		panic(err)
@@ -21,16 +34,23 @@ func readFile(path string) [][]byte {
 
 	scanner := bufio.NewScanner(file)
 
-	matrix := make([][]byte, 0)
+	data := make([]string, 0)
 	for scanner.Scan() {
 		line := scanner.Text()
-		matrix = append(matrix, []byte(line))
+		data = append(data, line)
 	}
 
 	if err := scanner.Err(); err != nil {
 		panic(err)
 	}
-	return matrix
+	return data
+}
+
+func middlePageNumberSum(path1, path2 string) int {
+	rules := compileRules(readFile(path1))
+	pages := compilePages(readFile(path2))
+
+	return sum
 }
 
 func main() {
