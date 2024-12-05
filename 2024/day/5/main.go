@@ -9,6 +9,29 @@ import (
 	"strings"
 )
 
+func isValid(rules [][]int, pages []int) bool {
+	pagesSet := make(map[int]bool, len(pages))
+	pageInd := make(map[int]int, len(pages))
+
+	for _, v := range pages {
+		pagesSet[v] = true
+	}
+
+	for _, v := range rules {
+		if pagesSet[v[0]] && pagesSet[v[1]] {
+			pageInd[v[1]]++
+		}
+	}
+
+	for i := 0; i < len(pages)-1; i++ {
+		if pageInd[pages[i]] >= pageInd[pages[i+1]] {
+			return false
+		}
+	}
+
+	return true
+}
+
 func compileUpdages(data []string) [][]int {
 	updates := make([][]int, 0, len(data))
 	for _, line := range data {
@@ -69,19 +92,18 @@ func middlePageNumberSum(path1, path2 string) int {
 	rules := compileRules(readFile(path1))
 	updates := compileUpdages(readFile(path2))
 
-	fmt.Println(rules)
-	fmt.Println(updates)
-	// for _, update := range updates {
-	// 	if isValid(rules, update) {
-	// 		pos := len(update) / 2
-	// 		sum += update[pos]
-	// 	}
-	// }
+	sum := 0
+	for _, update := range updates {
+		if isValid(rules, update) {
+			pos := len(update) / 2
+			sum += update[pos]
+		}
+	}
 
-	return 0 //sum
+	return sum
 }
 
 func main() {
-	// fmt.Println(middlePageNumberSum("input_part_1.txt", "input_part_2.txt"))
+	fmt.Println(middlePageNumberSum("input_part_1.txt", "input_part_2.txt"))
 	fmt.Println(middlePageNumberSum("input_mini_part_1.txt", "input_mini_part_2.txt"))
 }
