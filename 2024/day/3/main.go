@@ -18,10 +18,21 @@ func main() {
 
 	var sum int
 
+	do := true
+
 	for scanner.Scan() {
 		line := scanner.Text()
+
 		for i := 0; i < len(line)-9; i++ {
-			if line[i:i+3] == "mul" {
+			if line[i:i+4] == "do()" {
+				do = true
+			}
+
+			if line[i:i+7] == "don't()" {
+				do = false
+			}
+
+			if do && line[i:i+3] == "mul" {
 				// Check Open Paren
 				openParenPos := i + 3
 				if openParenPos < len(line) && line[openParenPos] != '(' {
