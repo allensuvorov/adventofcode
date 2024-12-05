@@ -133,5 +133,5 @@ func middlePageNumberSum(path1, path2 string) {
 
 func main() {
 	middlePageNumberSum("input_part_1.txt", "input_part_2.txt")
-	middlePageNumberSum("input_mini_part_1.txt", "input_mini_part_2.txt")
+	// middlePageNumberSum("input_mini_part_1.txt", "input_mini_part_2.txt")
 }
