@@ -3,20 +3,39 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"log"
 	"os"
 	"strconv"
+	"strings"
 )
+
+func compileUpdages(data []string) [][]int {
+	updates := make([][]int, len(data))
+	for i, line := range data {
+		numsStr := strings.Split(line, ",")
+		nums := make([]int, len(numsStr))
+		for i, s := range numsStr {
+			num, err := strconv.Atoi(s)
+			if err != nil {
+				log.Print(err)
+			}
+			nums[i] = num
+		}
+		updates[i] = nums
+	}
+	return updates
+}
 
 func compileRules(data []string) [][]int {
 	rules := make([][]int, len(data))
-	for _, v := range data {
-		num1, err := strconv.Atoi(v[:2])
+	for _, line := range data {
+		num1, err := strconv.Atoi(line[:2])
 		if err != nil {
-			fmt.Println(err)
+			log.Print(err)
 		}
-		num2, err := strconv.Atoi(v[:2])
+		num2, err := strconv.Atoi(line[:2])
 		if err != nil {
-			fmt.Println(err)
+			log.Print(err)
 		}
 
 		rule := []int{num1, num2}
@@ -48,7 +67,7 @@ func readFile(path string) []string {
 
 func middlePageNumberSum(path1, path2 string) int {
 	rules := compileRules(readFile(path1))
-	updates := compilePages(readFile(path2))
+	updates := compileUpdages(readFile(path2))
 
 	for _, update := range updates {
 		if isValid(rules, update) {
