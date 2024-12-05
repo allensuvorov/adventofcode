@@ -6,7 +6,7 @@ import (
 	"os"
 )
 
-func main() {
+func countXmas() int {
 	file, err := os.Open("input.txt")
 	if err != nil {
 		panic(err)
@@ -26,7 +26,7 @@ func main() {
 	rows, cols := len(matrix), len(matrix[0])
 	q := []byte{}
 
-	countXmas := func(r, c int) {
+	updateCount := func(r, c int) {
 		q = append(q, matrix[r][c])
 		if len(q) > 4 {
 			q = q[1:]
@@ -40,7 +40,7 @@ func main() {
 	for r := range rows {
 		q = []byte{}
 		for c := 0; c < cols; c++ {
-			countXmas(r, c)
+			updateCount(r, c)
 		}
 	}
 
@@ -48,7 +48,7 @@ func main() {
 	for c := range cols {
 		q = []byte{}
 		for r := 0; r < rows; r++ {
-			countXmas(r, c)
+			updateCount(r, c)
 		}
 	}
 
@@ -57,7 +57,7 @@ func main() {
 		q = []byte{}
 		c := 0
 		for r := r1; r < rows; r++ {
-			countXmas(r, c)
+			updateCount(r, c)
 			c++
 		}
 	}
@@ -67,7 +67,7 @@ func main() {
 		q = []byte{}
 		r := 0
 		for c := c1; c < cols; c++ {
-			countXmas(r, c)
+			updateCount(r, c)
 			r++
 		}
 	}
@@ -75,6 +75,9 @@ func main() {
 	if err := scanner.Err(); err != nil {
 		panic(err)
 	}
+	return xmasCount
+}
 
-	fmt.Println(xmasCount)
+func main() {
+	fmt.Println(countXmas())
 }
