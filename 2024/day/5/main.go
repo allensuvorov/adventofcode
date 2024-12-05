@@ -10,15 +10,15 @@ import (
 )
 
 func isValid(rules [][]int, pages []int) bool {
-	pagesSet := make(map[int]bool, len(pages))
+	pageSet := make(map[int]bool, len(pages))
 	pageInd := make(map[int]int, len(pages))
 
 	for _, v := range pages {
-		pagesSet[v] = true
+		pageSet[v] = true
 	}
 
 	for _, v := range rules {
-		if pagesSet[v[0]] && pagesSet[v[1]] {
+		if pageSet[v[0]] && pageSet[v[1]] {
 			pageInd[v[1]]++
 		}
 	}
