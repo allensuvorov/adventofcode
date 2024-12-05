@@ -88,22 +88,22 @@ func readFile(path string) []string {
 	return data
 }
 
-func middlePageNumberSum(path1, path2 string) int {
+func middlePageNumberSum(path1, path2 string) {
 	rules := compileRules(readFile(path1))
 	updates := compileUpdages(readFile(path2))
 
-	sum := 0
+	initiallyCorrectUpdatesSum := 0
+	// correctedUpdatesSum := 0
 	for _, update := range updates {
 		if isValid(rules, update) {
 			pos := len(update) / 2
-			sum += update[pos]
+			initiallyCorrectUpdatesSum += update[pos]
 		}
 	}
-
-	return sum
+	fmt.Printf("sum of initially correct updates: %v", initiallyCorrectUpdatesSum)
 }
 
 func main() {
-	fmt.Println(middlePageNumberSum("input_part_1.txt", "input_part_2.txt"))
-	fmt.Println(middlePageNumberSum("input_mini_part_1.txt", "input_mini_part_2.txt"))
+	middlePageNumberSum("input_part_1.txt", "input_part_2.txt")
+	middlePageNumberSum("input_mini_part_1.txt", "input_mini_part_2.txt")
 }
