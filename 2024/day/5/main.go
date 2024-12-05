@@ -106,21 +106,22 @@ func middlePageNumberSum(path1, path2 string) {
 	rules := compileRules(readFile(path1))
 	updates := compileUpdates(readFile(path2))
 
-	initiallyCorrectUpdatesSum := 0
-	correctedUpdatesSum := 0
+	correctOrderTotal := 0
+	fixedOrderTotal := 0
+
 	for _, update := range updates {
 		pageInd := countPageIndegree(rules, update)
 		if isValidOrder(pageInd, update) {
 			pos := len(update) / 2
-			initiallyCorrectUpdatesSum += update[pos]
+			correctOrderTotal += update[pos]
 		} else {
 			fixOrder(pageInd, update)
 			pos := len(update) / 2
-			correctedUpdatesSum += update[pos]
+			fixedOrderTotal += update[pos]
 		}
 	}
-	fmt.Printf("sum of initially correct updates: %v\n", initiallyCorrectUpdatesSum)
-	fmt.Printf("sum of corrected updates: %v \n", correctedUpdatesSum)
+	fmt.Printf("sum of initially correct updates: %v\n", correctOrderTotal)
+	fmt.Printf("sum of corrected updates: %v \n", fixedOrderTotal)
 
 }
 
