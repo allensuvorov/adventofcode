@@ -9,7 +9,7 @@ import (
 	"strings"
 )
 
-func isValid(rules [][]int, pages []int) bool {
+func isValidOrder(rules [][]int, pages []int) bool {
 	pageSet := make(map[int]bool, len(pages))
 	pageInd := make(map[int]int, len(pages))
 
@@ -32,7 +32,29 @@ func isValid(rules [][]int, pages []int) bool {
 	return true
 }
 
-func compileUpdages(data []string) [][]int {
+func fixOrder(rules [][]int, pages []int) {
+	pageSet := make(map[int]bool, len(pages))
+	pageInd := make(map[int]int, len(pages))
+
+	for _, v := range pages {
+		pageSet[v] = true
+	}
+
+	for _, v := range rules {
+		if pageSet[v[0]] && pageSet[v[1]] {
+			pageInd[v[1]]++
+		}
+	}
+
+	// counting sort
+	indPage := make([]int, len(pages))
+	for page, ind := range pageInd {
+		indPage[ind] = page
+	}
+	copy(pages, indPage)
+}
+
+func compileUpdates(data []string) [][]int {
 	updates := make([][]int, 0, len(data))
 	for _, line := range data {
 		numsStr := strings.Split(line, ",")
@@ -90,17 +112,23 @@ func readFile(path string) []string {
 
 func middlePageNumberSum(path1, path2 string) {
 	rules := compileRules(readFile(path1))
-	updates := compileUpdages(readFile(path2))
+	updates := compileUpdates(readFile(path2))
 
 	initiallyCorrectUpdatesSum := 0
-	// correctedUpdatesSum := 0
+	correctedUpdatesSum := 0
 	for _, update := range updates {
-		if isValid(rules, update) {
+		if isValidOrder(rules, update) {
 			pos := len(update) / 2
 			initiallyCorrectUpdatesSum += update[pos]
+		} else {
+			fixOrder(rules, update)
+			pos := len(update) / 2
+			correctedUpdatesSum += update[pos]
 		}
 	}
-	fmt.Printf("sum of initially correct updates: %v", initiallyCorrectUpdatesSum)
+	fmt.Printf("sum of initially correct updates: %v\n", initiallyCorrectUpdatesSum)
+	fmt.Printf("sum of corrected updates: %v \n", correctedUpdatesSum)
+
 }
 
 func main() {
