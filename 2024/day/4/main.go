@@ -52,7 +52,7 @@ func main() {
 		}
 	}
 
-	// diagonal count
+	// diagonal count left
 	for r1 := rows - 1; r1 >= 0; r1-- {
 		q = []byte{}
 		c := 0
@@ -62,8 +62,14 @@ func main() {
 		}
 	}
 
-	if string(q) == "XMAS" || string(q) == "SAMX" {
-		xmasCount++
+	// diagonal count top side
+	for c1 := 1; c1 < cols; c1++ {
+		q = []byte{}
+		r := 0
+		for c := c1; c < cols; c++ {
+			countXmas(r, c)
+			r++
+		}
 	}
 
 	if err := scanner.Err(); err != nil {
