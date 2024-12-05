@@ -9,7 +9,7 @@ import (
 	"strings"
 )
 
-func isValidOrder(rules [][]int, pages []int) bool {
+func countPageIndegree(rules [][]int, pages []int) map[int]int {
 	pageSet := make(map[int]bool, len(pages))
 	pageInd := make(map[int]int, len(pages))
 
@@ -22,6 +22,10 @@ func isValidOrder(rules [][]int, pages []int) bool {
 			pageInd[v[1]]++
 		}
 	}
+	return pageInd
+}
+
+func isValidOrder(pageInd map[int]int, pages []int) bool {
 
 	for i := 0; i < len(pages)-1; i++ {
 		if pageInd[pages[i]] >= pageInd[pages[i+1]] {
@@ -32,21 +36,9 @@ func isValidOrder(rules [][]int, pages []int) bool {
 	return true
 }
 
-func fixOrder(rules [][]int, pages []int) {
-	pageSet := make(map[int]bool, len(pages))
-	pageInd := make(map[int]int, len(pages))
+func fixOrder(pageInd map[int]int, pages []int) {
 
-	for _, v := range pages {
-		pageSet[v] = true
-	}
-
-	for _, v := range rules {
-		if pageSet[v[0]] && pageSet[v[1]] {
-			pageInd[v[1]]++
-		}
-	}
-
-	// counting sort
+	// topological sort
 	indPage := make([]int, len(pages))
 	for page, ind := range pageInd {
 		indPage[ind] = page
@@ -117,11 +109,12 @@ func middlePageNumberSum(path1, path2 string) {
 	initiallyCorrectUpdatesSum := 0
 	correctedUpdatesSum := 0
 	for _, update := range updates {
-		if isValidOrder(rules, update) {
+		pageInd := countPageIndegree(rules, update)
+		if isValidOrder(pageInd, update) {
 			pos := len(update) / 2
 			initiallyCorrectUpdatesSum += update[pos]
 		} else {
-			fixOrder(rules, update)
+			fixOrder(pageInd, update)
 			pos := len(update) / 2
 			correctedUpdatesSum += update[pos]
 		}
@@ -132,6 +125,6 @@ func middlePageNumberSum(path1, path2 string) {
 }
 
 func main() {
-	middlePageNumberSum("input_part_1.txt", "input_part_2.txt")
 	// middlePageNumberSum("input_mini_part_1.txt", "input_mini_part_2.txt")
+	middlePageNumberSum("input_part_1.txt", "input_part_2.txt")
 }
