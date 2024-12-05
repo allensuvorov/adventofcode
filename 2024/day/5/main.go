@@ -48,7 +48,14 @@ func readFile(path string) []string {
 
 func middlePageNumberSum(path1, path2 string) int {
 	rules := compileRules(readFile(path1))
-	pages := compilePages(readFile(path2))
+	updates := compilePages(readFile(path2))
+
+	for _, update := range updates {
+		if isValid(rules, update) {
+			pos := len(update) / 2
+			sum += update[pos]
+		}
+	}
 
 	return sum
 }
