@@ -48,17 +48,24 @@ func fixOrder(pageInd map[int]int, pages []int) {
 
 func compileUpdates(data []string) [][]int {
 	updates := make([][]int, 0, len(data))
+	afterLineBreak := false
 	for _, line := range data {
-		numsStr := strings.Split(line, ",")
-		nums := make([]int, len(numsStr))
-		for i, s := range numsStr {
-			num, err := strconv.Atoi(s)
-			if err != nil {
-				log.Print(err)
-			}
-			nums[i] = num
+		if line == "" {
+			afterLineBreak = true
+			continue
 		}
-		updates = append(updates, nums)
+		if afterLineBreak {
+			numsStr := strings.Split(line, ",")
+			nums := make([]int, len(numsStr))
+			for i, s := range numsStr {
+				num, err := strconv.Atoi(s)
+				if err != nil {
+					log.Print(err)
+				}
+				nums[i] = num
+			}
+			updates = append(updates, nums)
+		}
 	}
 	return updates
 }
@@ -66,6 +73,9 @@ func compileUpdates(data []string) [][]int {
 func compileRules(data []string) [][]int {
 	rules := make([][]int, 0, len(data))
 	for _, line := range data {
+		if line == "" {
+			break
+		}
 		num1, err := strconv.Atoi(line[:2])
 		if err != nil {
 			log.Print(err)
@@ -102,9 +112,9 @@ func readFile(path string) []string {
 	return data
 }
 
-func middlePageNumberSum(path1, path2 string) {
-	rules := compileRules(readFile(path1))
-	updates := compileUpdates(readFile(path2))
+func middlePageNumberSum(path string) {
+	rules := compileRules(readFile(path))
+	updates := compileUpdates(readFile(path))
 
 	correctOrderTotal := 0
 	fixedOrderTotal := 0
@@ -126,6 +136,6 @@ func middlePageNumberSum(path1, path2 string) {
 }
 
 func main() {
-	// middlePageNumberSum("input_mini_part_1.txt", "input_mini_part_2.txt")
-	middlePageNumberSum("input_part_1.txt", "input_part_2.txt")
+	middlePageNumberSum("sample.txt")
+	middlePageNumberSum("input.txt")
 }
