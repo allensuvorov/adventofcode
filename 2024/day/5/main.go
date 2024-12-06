@@ -9,11 +9,11 @@ import (
 	"strings"
 )
 
-func countPageIndegree(rules [][]int, pages []int) map[int]int {
-	pageSet := make(map[int]bool, len(pages))
-	pageInd := make(map[int]int, len(pages))
+func countPageIndegree(rules [][]int, update []int) map[int]int {
+	pageSet := make(map[int]bool, len(update))
+	pageInd := make(map[int]int, len(update))
 
-	for _, v := range pages {
+	for _, v := range update {
 		pageSet[v] = true
 	}
 
@@ -25,10 +25,10 @@ func countPageIndegree(rules [][]int, pages []int) map[int]int {
 	return pageInd
 }
 
-func isValidOrder(pageInd map[int]int, pages []int) bool {
+func isValidOrder(pageInd map[int]int, update []int) bool {
 
-	for i := 0; i < len(pages)-1; i++ {
-		if pageInd[pages[i]] >= pageInd[pages[i+1]] {
+	for i := 0; i < len(update)-1; i++ {
+		if pageInd[update[i]] >= pageInd[update[i+1]] {
 			return false
 		}
 	}
@@ -36,14 +36,14 @@ func isValidOrder(pageInd map[int]int, pages []int) bool {
 	return true
 }
 
-func fixOrder(pageInd map[int]int, pages []int) {
+func fixOrder(pageInd map[int]int, update []int) {
 
 	// topological sort
-	indPage := make([]int, len(pages))
+	indPage := make([]int, len(update))
 	for page, ind := range pageInd {
 		indPage[ind] = page
 	}
-	copy(pages, indPage)
+	copy(update, indPage)
 }
 
 func compileUpdates(data []string) [][]int {
